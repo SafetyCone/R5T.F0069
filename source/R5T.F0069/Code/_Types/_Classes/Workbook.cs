@@ -23,6 +23,7 @@ namespace R5T.F0069
 
         public Application Application { get; private set; }
 
+
         /// <summary>
         /// Set the calculation mode for the workbook.
         /// </summary>

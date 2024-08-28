@@ -21,9 +21,10 @@ Excel automation types library.
 
 * Only one library with the COM reference, all Excel-related functionality (including wrapping types) are in that one library.
 * Sub-libraries for values and types that do not use any interop functionality.
-* No interop types are exposed from types in the main R5T.F0069 namespace. This is for ease of use. (In a client library, you *can* use instances of types that expose interop types in their interface without the client library needing the COM reference as long as you only use the parts of the interface that do *not* expose the interop types. But as soon as you use any of the part that exposes interop types, you need to add the COM reference to the client project.)
+* No interop types are exposed from types in the main R5T.F0069 namespace. This is for ease of use.
+  * (In a client library, you *can* use instances of types that expose interop types in their interface without the client library needing the COM reference as long as you only use the parts of the interface that do *not* expose the interop types. But as soon as you use any of the part that exposes interop types, you need to add the COM reference to the client project.)
 * However, interop types *are* exposed in the R5T.F0069.Interop sub-namespace.
-    * Wrapper use the "internal" access modifier for properties exposing their underlying interop type.
+    * Wrappers use the "internal" access modifier for properties exposing their underlying interop type.
     * Public extension methods in a different namespace can then allow public access to the underlying interop type.
     => This way, the underlying interop type instance *is* available if a consuming library really wants it, but it won't be "tripped" over when using the main namespace.
 * Most type functionality is provided via extension methods, calling registered functionality methods, that call Interop-namespace functionality methods.

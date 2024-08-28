@@ -11,19 +11,14 @@ public static class XlCalculationExtensions
 {
     public static ExcelCalculationMode ToExcelCalculationMode(this Xl.XlCalculation xlCalculation)
     {
-        switch(xlCalculation)
+        var output = xlCalculation switch
         {
-            case Xl.XlCalculation.xlCalculationAutomatic:
-                return ExcelCalculationMode.Automatic;
+            Xl.XlCalculation.xlCalculationAutomatic => ExcelCalculationMode.Automatic,
+            Xl.XlCalculation.xlCalculationManual => ExcelCalculationMode.Manual,
+            Xl.XlCalculation.xlCalculationSemiautomatic => ExcelCalculationMode.SemiAutomatic,
+            _ => throw Instances.SwitchOperator.Get_DefaultCaseException(xlCalculation),
+        };
 
-            case Xl.XlCalculation.xlCalculationManual:
-                return ExcelCalculationMode.Manual;
-
-            case Xl.XlCalculation.xlCalculationSemiautomatic:
-                return ExcelCalculationMode.SemiAutomatic;
-
-            default:
-                throw Instances.EnumerationOperator.SwitchDefaultCaseException(xlCalculation);
-        }
+        return output;
     }
 }

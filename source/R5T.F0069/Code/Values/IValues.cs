@@ -8,6 +8,9 @@ namespace R5T.F0069
 	[ValuesMarker]
 	public partial interface IValues : IValuesMarker
 	{
-		public bool DefaultApplicationVisibility => true;
+		/// <summary>
+		/// <para><value>true</value></para>
+		/// </summary>
+		public bool ApplicationVisibility_Default => true;
 	}
 }

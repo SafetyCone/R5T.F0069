@@ -125,10 +125,10 @@ namespace R5T.F0069
         }
 
         /// <summary>
-        /// Uses the <see cref="IValues.DefaultApplicationVisibility"/> value.
+        /// Uses the <see cref="IValues.ApplicationVisibility_Default"/> value.
         /// </summary>
         public Application()
-            : this(Instances.Values.DefaultApplicationVisibility)
+            : this(Instances.Values.ApplicationVisibility_Default)
         {
         }
 

@@ -26,7 +26,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\R5T.F0000\source\R5T.F0000\R5T.F0000.csproj" />
+    <ProjectReference Include="..\..\..\R5T.L0066\source\R5T.L0066\R5T.L0066.csproj" />
     <ProjectReference Include="..\..\..\R5T.NG0011\source\R5T.NG0011\R5T.NG0011.csproj" />
   </ItemGroup>
 </Project>
