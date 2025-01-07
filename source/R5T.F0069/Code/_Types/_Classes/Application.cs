@@ -37,7 +37,21 @@ namespace R5T.F0069
                 }
 
                 this.XlApplication.DisplayAlerts = false;
+                
                 this.XlApplication.Quit();
+
+                Instances.MarshalOperator.FinalRelease_ComObject(this.XlApplication);
+
+                this.XlApplication = null;
+
+                // Yes, this is needed twice.
+                // The first call releases *our* disposable objects, such that then the COM runtime callable wrappers (RCWs) are then without references.
+                // The second call releases the RCWs.
+                // This double-call is placed here at the application level such that the expensive garbage collection process is only called once.
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
 
             this.zDisposed = true;

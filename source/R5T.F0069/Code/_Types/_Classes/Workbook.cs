@@ -17,8 +17,54 @@ namespace R5T.F0069
     /// Thus workbooks are saved then closed.
     /// </remarks>
     [UtilityTypeMarker]
-    public class Workbook
+    public sealed class Workbook : IDisposable, IEquatable<Workbook>
     {
+        #region IDisposable
+
+        private bool zDisposed = false; // To detect redundant calls.
+
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        // Remove the virtual call if the class is sealed (or has no plans for subclassing, in which case this should be communicated by sealing the class).
+        private void Dispose(bool disposing)
+        {
+            if (!this.zDisposed)
+            {
+                if (disposing)
+                {
+                    // Do nothing.
+                    /// The <see cref="Xl.Application"/> object itself is managed, the Excel application it is the handle to is not.
+                }
+
+                Instances.MarshalOperator.Release_ComObject(this.XlWorkbook);
+
+                this.XlWorkbook = null;
+            }
+
+            this.zDisposed = true;
+        }
+
+        ~Workbook()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(false);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// The underlying Excel COM automation workbook object.
+        /// </summary>
+        /// <remarks>
+        /// Note: will never be null.
+        /// See <see cref="IWorkbookOperator.Is_Valid(Workbook)"/>.
+        /// </remarks>
         internal Xl.Workbook XlWorkbook { get; private set; }
 
         public Application Application { get; private set; }
@@ -44,6 +90,7 @@ namespace R5T.F0069
                 this.Application.XlApplication.Calculation = xlCalculation;
             }
         }
+
         public string FilePath
         {
             get
@@ -53,6 +100,7 @@ namespace R5T.F0069
             }
             // Read-only.
         }
+
         public ExcelFileFormat FileFormat
         {
             get
@@ -64,15 +112,17 @@ namespace R5T.F0069
             }
             // Read-only.
         }
+
         public string Name
         {
             get
             {
-                var output = this.XlWorkbook.Name;
+                var output = Instances.WorkbookOperator.Get_Name(this);
                 return output;
             }
             // Read-only.
         }
+
         public int WorksheetCount
         {
             get
@@ -81,6 +131,7 @@ namespace R5T.F0069
                 return output;
             }
         }
+
         public IEnumerable<Worksheet> Worksheets
         {
             get
@@ -157,6 +208,30 @@ namespace R5T.F0069
 
             var worksheet = new Worksheet(xlWorksheet, this);
             return worksheet;
+        }
+
+        public bool Equals(Workbook other)
+        {
+            var output = Instances.WorkbookOperator.Equals(
+                this,
+                other);
+
+            return output;
+        }
+
+        public override bool Equals(object obj)
+            => this.Equals(obj as Workbook);
+
+        public override int GetHashCode()
+        {
+            var output = Instances.WorkbookOperator.Get_HashCode(this);
+            return output;
+        }
+
+        public override string ToString()
+        {
+            var output = Instances.WorkbookOperator.Get_Name(this);
+            return output;
         }
     }
 }

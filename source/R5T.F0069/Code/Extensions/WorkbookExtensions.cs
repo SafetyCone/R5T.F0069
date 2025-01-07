@@ -85,3 +85,21 @@ public static class WorkbookExtensions
         workbook.XlWorkbook.Save();
     }
 }
+
+
+namespace R5T.F0069.Extensions
+{
+    public static class WorkbookExtensions
+    {
+        public static Worksheet Get_Worksheet_First(this Workbook workbook)
+            => Instances.WorkbookOperator.Get_Worksheet_First(workbook);
+
+        public static Name Set_NamedRange(this Workbook workbook,
+            Range range,
+            string name)
+            => Instances.WorkbookOperator.Set_NamedRange(
+                workbook,
+                range,
+                name);
+    }
+}

@@ -5,6 +5,9 @@ using R5T.T0142;
 
 namespace R5T.F0069
 {
+    /// <summary>
+    /// Specifies the size of a range.
+    /// </summary>
     [UtilityTypeMarker]
     public class RangeSize
     {

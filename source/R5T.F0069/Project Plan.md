@@ -33,6 +33,14 @@ Excel automation types library.
 
 ## Excel COM Automation
 
+## Orphaned Excel Processes
+
+All Excel COM automation object wrappers need to be disposable.
+
+Links:
+
+    - https://www.add-in-express.com/creating-addins-blog/release-excel-com-objects/
+
 ### Only Windows Executables
 
 This library is a .NET Standard library, which implies cross-platform capabilities if used from a .NET Core or .NET 5.0+ application entry-point. However, Excel COM automation only works if Excel is present on the machine *and* COM automation is available. Since COM automation is a Windows-only technology, the entry-point application must be Windows-only.

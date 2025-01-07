@@ -38,3 +38,29 @@ public static class WorksheetExtensions
         }
     }
 }
+
+
+namespace R5T.F0069.Extensions
+{
+    public static class WorksheetExtensions
+    {
+        public static Range Get_Cell(this Worksheet worksheet,
+            int row_OneBased,
+            int column_OneBased)
+            => Instances.WorksheetOperator.Get_Cell(
+                worksheet,
+                row_OneBased,
+                column_OneBased);
+
+        public static Range Get_Range(this Worksheet worksheet,
+            Range upperLeft,
+            Range lowerRight)
+            => Instances.WorksheetOperator.Get_Range(
+                worksheet,
+                upperLeft,
+                lowerRight);
+
+        public static Range Get_Range_A1(this Worksheet worksheet)
+            => Instances.WorksheetOperator.Get_Range_A1(worksheet);
+    }
+}

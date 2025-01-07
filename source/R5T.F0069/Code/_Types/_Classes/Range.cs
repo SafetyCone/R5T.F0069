@@ -9,8 +9,55 @@ using Xl = Microsoft.Office.Interop.Excel;
 namespace R5T.F0069
 {
     [UtilityTypeMarker]
-    public class Range
+    public class Range : IDisposable
     {
+        #region IDisposable
+
+        private bool zDisposed = false; // To detect redundant calls.
+
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        // Remove the virtual call if the class is sealed (or has no plans for subclassing, in which case this should be communicated by sealing the class).
+        private void Dispose(bool disposing)
+        {
+            if (!this.zDisposed)
+            {
+                if (disposing)
+                {
+                    // Do nothing.
+                    /// The <see cref="Xl.Range"/> object itself is managed, the Excel application it is the handle to is not.
+                }
+
+                Instances.MarshalOperator.Release_ComObject(this.XlRange);
+
+                this.XlRange = null;
+            }
+
+            this.zDisposed = true;
+        }
+
+        ~Range()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            this.Dispose(false);
+        }
+
+        #endregion
+
+
+        /// <summary>
+        /// The underlying Excel COM automation range object.
+        /// </summary>
+        /// <remarks>
+        /// Note: will never be null.
+        /// See <see cref="IRangeOperator.Is_Valid(Range)"/>.
+        /// </remarks>
         internal Xl.Range XlRange { get; private set; }
 
         public Worksheet Worksheet { get; private set; }
@@ -23,6 +70,7 @@ namespace R5T.F0069
                 return output;
             }
         }
+
         public Application Application
         {
             get
@@ -31,6 +79,7 @@ namespace R5T.F0069
                 return output;
             }
         }
+
         public int Row
         {
             get
@@ -39,6 +88,7 @@ namespace R5T.F0069
                 return row;
             }
         }
+
         public int RowCount
         {
             get
@@ -47,6 +97,7 @@ namespace R5T.F0069
                 return rowCount;
             }
         }
+
         public int Column
         {
             get
@@ -55,6 +106,7 @@ namespace R5T.F0069
                 return column;
             }
         }
+
         public int ColumnCount
         {
             get
@@ -63,6 +115,7 @@ namespace R5T.F0069
                 return columnCount;
             }
         }
+
         public IEnumerable<Range> Cells
         {
             get
@@ -74,6 +127,7 @@ namespace R5T.F0069
                 }
             }
         }
+
         public object Value
         {
             get
@@ -86,6 +140,7 @@ namespace R5T.F0069
                 this.XlRange.Value2 = value;
             }
         }
+
         public Decimal ValueDecimal
         {
             get
@@ -98,6 +153,7 @@ namespace R5T.F0069
                 this.XlRange.Value2 = value;
             }
         }
+
         public double ValueDouble
         {
             get
@@ -110,6 +166,7 @@ namespace R5T.F0069
                 this.XlRange.Value2 = value;
             }
         }
+
         public int ValueInt
         {
             get
@@ -122,6 +179,7 @@ namespace R5T.F0069
                 this.XlRange.Value2 = value;
             }
         }
+
         public string ValueString
         {
             get
@@ -134,6 +192,7 @@ namespace R5T.F0069
                 this.XlRange.Value2 = value;
             }
         }
+
         public object[,] Values
         {
             get
@@ -146,6 +205,7 @@ namespace R5T.F0069
                 this.XlRange.Value = value;
             }
         }
+
         public bool IsEmpty
         {
             get
@@ -154,6 +214,7 @@ namespace R5T.F0069
                 return output;
             }
         }
+
         public bool IsNumeric
         {
             get
@@ -162,6 +223,7 @@ namespace R5T.F0069
                 return output;
             }
         }
+
         public double ColumnWidth
         {
             get
@@ -174,6 +236,7 @@ namespace R5T.F0069
                 this.XlRange.ColumnWidth = value;
             }
         }
+
         public string Formula
         {
             get
@@ -186,6 +249,16 @@ namespace R5T.F0069
                 this.XlRange.Formula = value;
             }
         }
+
+        public string Name
+        {
+            get
+            {
+                var name = Instances.RangeOperator.Get_Name(this);
+                return name;
+            }
+        }
+
         public string NumberFormat
         {
             get
@@ -198,6 +271,7 @@ namespace R5T.F0069
                 this.XlRange.NumberFormat = value;
             }
         }
+
         public Range EndUp
         {
             get
@@ -208,6 +282,7 @@ namespace R5T.F0069
                 return range;
             }
         }
+
         public Range EndDown
         {
             get
@@ -218,6 +293,7 @@ namespace R5T.F0069
                 return range;
             }
         }
+
         public Range EndLeft
         {
             get
@@ -228,16 +304,16 @@ namespace R5T.F0069
                 return range;
             }
         }
+
         public Range EndRight
         {
             get
             {
-                var xlRange = this.XlRange.End[Xl.XlDirection.xlToRight];
-
-                var range = new Range(xlRange, this.Worksheet);
+                var range = Instances.RangeOperator.Get_End_Right(this);
                 return range;
             }
         }
+
         public Range this[int row, int column]
         {
             get
@@ -254,6 +330,12 @@ namespace R5T.F0069
         {
             this.XlRange = xlRange;
             this.Worksheet = worksheet;
+        }
+
+        public override string ToString()
+        {
+            var representation = this.Name;
+            return representation;
         }
     }
 }
